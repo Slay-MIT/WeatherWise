@@ -1,11 +1,69 @@
+'use client'
 
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
+import { Message } from "@/types/chat";
+import { getWeatherData } from "@/app/api/weatherApi";
+import { extractLocation, getGeminiResponse, getInitialMessage } from "@/app/api/GeminiService";
+import { useEffect, useState } from "react";
 
 export function Chat_window() {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [currentWeatherData, setCurrentWeatherData] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchInitialMessage = async () => {
+      const initialMessage = await getInitialMessage();
+      setMessages([{ content: initialMessage, sender: 'WeatherWise', type: 'bot' }]);
+    };
+    fetchInitialMessage();
+  }, []);
+
+  const handleSendMessage = async () => {
+    if (inputMessage.trim() === '') return;
+
+    const userMessage: Message = {
+      content: inputMessage,
+      sender: 'You',
+      type: 'user'
+    };
+    setMessages(prevMessages => [...prevMessages, userMessage]);
+
+    try {
+      const location = await extractLocation(inputMessage);
+      let weatherData = currentWeatherData;
+
+      if (location) {
+        weatherData = await getWeatherData(location);
+        setCurrentWeatherData(weatherData);
+      }
+
+      const geminiResponse = await getGeminiResponse(weatherData, inputMessage);
+
+      const botMessage: Message = {
+        content: geminiResponse,
+        sender: 'WeatherWise',
+        type: 'bot'
+      };
+      setMessages(prevMessages => [...prevMessages, botMessage]);
+    } catch (error) {
+      console.error('Error processing message:', error);
+      const errorMessage: Message = {
+        content: "I'm sorry, I couldn't process that request. Please try again with a valid location.",
+        sender: 'WeatherWise',
+        type: 'bot'
+      };
+      setMessages(prevMessages => [...prevMessages, errorMessage]);
+    }
+
+    setInputMessage('');
+  };
+
+  
   return (
-    <div className="flex flex-col h-full bg-background">
+    <div className="flex flex-col h-full bg-background w-full">
       <header className="flex items-center gap-4 px-4 py-3 border-b bg-background">
         <Avatar className="w-8 h-8 border">
           <AvatarImage src="/placeholder-user.jpg" />
@@ -15,70 +73,54 @@ export function Chat_window() {
       </header>
       <div className="flex-1 overflow-auto p-4">
         <div className="grid gap-4">
-          <div className="flex items-start gap-4 justify-end">
-            <div className="grid gap-1 bg-primary text-primary-foreground p-3 rounded-lg max-w-[80%]">
-              <div className="font-medium">WeatherWise</div>
-              <div className="text-sm">
-                Airplane turbulence happens when the plane encounters pockets of air that are moving differently. It's
-                like sailing a boat on choppy water - the air pockets can make the plane feel like it's bouncing or
-                shaking a bit. It's completely normal and usually not dangerous at all.
+        {messages.map((message, index) => (
+            <div key={index} className={`flex items-start gap-4 ${message.type === 'bot' ? 'justify-end' : ''}`}>
+              {message.type === 'user' && (
+                <Avatar className="w-8 h-8 border">
+                  <AvatarImage src="/placeholder-user.jpg" />
+                  <AvatarFallback>U</AvatarFallback>
+                </Avatar>
+              )}
+              <div className={`grid gap-1 ${message.type === 'bot' ? 'bg-primary text-primary-foreground' : 'bg-muted'} p-3 rounded-lg max-w-[80%]`}>
+                <div className="font-medium">{message.sender}</div>
+                <div className="text-sm">{message.content}</div>
               </div>
+              {message.type === 'bot' && (
+                <Avatar className="w-8 h-8 border">
+                  <AvatarImage src="/placeholder-user.jpg" />
+                  <AvatarFallback>WW</AvatarFallback>
+                </Avatar>
+              )}
             </div>
-            <Avatar className="w-8 h-8 border">
-              <AvatarImage src="/placeholder-user.jpg" />
-              <AvatarFallback>WW</AvatarFallback>
-            </Avatar>
-          </div>
-          <div className="flex items-start gap-4">
-            <Avatar className="w-8 h-8 border">
-              <AvatarImage src="/placeholder-user.jpg" />
-              <AvatarFallback>U</AvatarFallback>
-            </Avatar>
-            <div className="grid gap-1 bg-muted p-3 rounded-lg max-w-[80%]">
-              <div className="font-medium">You</div>
-              <div className="text-sm">Hi there! Can you explain what causes airplane turbulence?</div>
-            </div>
-          </div>
-          <div className="flex items-start gap-4 justify-end">
-            <div className="grid gap-1 bg-primary text-primary-foreground p-3 rounded-lg max-w-[80%]">
-              <div className="font-medium">WeatherWise</div>
-              <div className="text-sm">
-                Here are a few more things to know about airplane turbulence: - It's caused by changes in air pressure,
-                temperature, and wind speed, often near weather systems like thunderstorms. - Turbulence can range from
-                mild, where it just feels a bit bumpy, to severe, where the plane may drop suddenly. - Modern planes are
-                built to withstand even severe turbulence, so it's very unlikely to cause any structural damage. - The
-                seatbelt sign is turned on when turbulence is expected, so it's important to keep your seatbelt fastened
-                for safety.
-              </div>
-            </div>
-            <Avatar className="w-8 h-8 border">
-              <AvatarImage src="/placeholder-user.jpg" />
-              <AvatarFallback>CG</AvatarFallback>
-            </Avatar>
-          </div>
-          <div className="flex items-start gap-4">
-            <Avatar className="w-8 h-8 border">
-              <AvatarImage src="/placeholder-user.jpg" />
-              <AvatarFallback>U</AvatarFallback>
-            </Avatar>
-            <div className="grid gap-1 bg-muted p-3 rounded-lg max-w-[80%]">
-              <div className="font-medium">You</div>
-              <div className="text-sm">
-                That makes sense, thanks for the explanation! Is there anything else I should know about turbulence?
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
+
+
+
       <div className="sticky bottom-0 w-full bg-background border-t p-2">
         <div className="relative">
-          <Textarea placeholder="Type your message..." className="w-full rounded-xl pr-16 resize-none" rows={1} />
-          <Button type="submit" size="icon" className="absolute top-1/2 -translate-y-1/2 right-2">
+          <Textarea 
+            placeholder="Type your message..." 
+            className="w-full rounded-xl pr-16 resize-none" 
+            rows={1}
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSendMessage();
+              }
+            }}
+          />
+          <Button type="submit" size="icon" className="absolute top-1/2 -translate-y-1/2 right-2" onClick={handleSendMessage}>
             <SendIcon className="w-5 h-5" />
             <span className="sr-only">Send</span>
           </Button>
         </div>
       </div>
+
+
     </div>
   )
 }
