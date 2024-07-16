@@ -6,12 +6,14 @@ import { Button } from "@/components/ui/button"
 import { Message } from "@/types/chat";
 import { getWeatherData } from "@/app/api/weatherApi";
 import { extractLocation, getGeminiResponse, getInitialMessage } from "@/app/api/GeminiService";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export function Chat_window() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [currentWeatherData, setCurrentWeatherData] = useState<any>(null);
+  const [isTyping, setIsTyping] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchInitialMessage = async () => {
@@ -20,6 +22,10 @@ export function Chat_window() {
     };
     fetchInitialMessage();
   }, []);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, isTyping]);
 
   const handleSendMessage = async () => {
     if (inputMessage.trim() === '') return;
@@ -30,6 +36,10 @@ export function Chat_window() {
       type: 'user'
     };
     setMessages(prevMessages => [...prevMessages, userMessage]);
+    setInputMessage(''); // Clear the input message
+
+    // Delay showing the typing indicator
+    setTimeout(() => setIsTyping(true), 1200);
 
     try {
       const location = await extractLocation(inputMessage);
@@ -42,14 +52,20 @@ export function Chat_window() {
 
       const geminiResponse = await getGeminiResponse(weatherData, inputMessage);
 
+      setIsTyping(false);
+
       const botMessage: Message = {
         content: geminiResponse,
         sender: 'WeatherWise',
         type: 'bot'
       };
       setMessages(prevMessages => [...prevMessages, botMessage]);
-    } catch (error) {
+    } 
+    
+    
+    catch (error) {
       console.error('Error processing message:', error);
+      setIsTyping(false);
       const errorMessage: Message = {
         content: "I'm sorry, I couldn't process that request. Please try again with a valid location.",
         sender: 'WeatherWise',
@@ -57,11 +73,8 @@ export function Chat_window() {
       };
       setMessages(prevMessages => [...prevMessages, errorMessage]);
     }
-
-    setInputMessage('');
   };
 
-  
   return (
     <div className="flex flex-col h-full bg-background w-full">
       <header className="flex items-center gap-4 px-4 py-3 border-b bg-background">
@@ -73,30 +86,48 @@ export function Chat_window() {
       </header>
       <div className="flex-1 overflow-auto p-4">
         <div className="grid gap-4">
-        {messages.map((message, index) => (
-            <div key={index} className={`flex items-start gap-4 ${message.type === 'bot' ? 'justify-end' : ''}`}>
-              {message.type === 'user' && (
-                <Avatar className="w-8 h-8 border">
-                  <AvatarImage src="/placeholder-user.jpg" />
-                  <AvatarFallback>U</AvatarFallback>
-                </Avatar>
-              )}
+          {messages.map((message, index) => (
+            <div key={index} className={`flex items-start gap-4 ${message.type === 'bot' ? '' : 'flex-row-reverse'}`}>
+              <Avatar className="w-8 h-8 border">
+                {message.type === 'user' ? (
+                  <>
+                    <AvatarFallback>U</AvatarFallback>
+                    <AvatarImage src="/placeholder-user.jpg" />
+                  </>
+                ) : (
+                  <>
+                    <AvatarFallback>WW</AvatarFallback>
+                    <AvatarImage src="/placeholder-user.jpg" />
+                  </>
+                )}
+              </Avatar>
               <div className={`grid gap-1 ${message.type === 'bot' ? 'bg-primary text-primary-foreground' : 'bg-muted'} p-3 rounded-lg max-w-[80%]`}>
                 <div className="font-medium">{message.sender}</div>
-                <div className="text-sm">{message.content}</div>
+                {message.type === 'bot' ? (
+                  <TypewriterEffect text={message.content} />
+                ) : (
+                  <div className="text-sm">{message.content}</div>
+                )}
               </div>
-              {message.type === 'bot' && (
-                <Avatar className="w-8 h-8 border">
-                  <AvatarImage src="/placeholder-user.jpg" />
-                  <AvatarFallback>WW</AvatarFallback>
-                </Avatar>
-              )}
             </div>
           ))}
+
+
+          {isTyping && (
+            <div className="flex items-start gap-4">
+              <Avatar className="w-8 h-8 border">
+                <AvatarFallback>WW</AvatarFallback>
+                <AvatarImage src="/placeholder-user.jpg" />
+              </Avatar>
+              <div className="bg-primary text-primary-foreground p-3 rounded-lg">
+                <div className="font-medium">WeatherWise</div>
+                <div className="text-sm">Typing...</div>
+              </div>
+            </div>
+          )}
+          <div ref={messagesEndRef} />
         </div>
       </div>
-
-
 
       <div className="sticky bottom-0 w-full bg-background border-t p-2">
         <div className="relative">
@@ -119,10 +150,28 @@ export function Chat_window() {
           </Button>
         </div>
       </div>
-
-
     </div>
   )
+}
+
+function TypewriterEffect({ text }: { text: string }) {
+  const [displayedText, setDisplayedText] = useState('');
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (currentIndex < text.length) {
+      const timer = setTimeout(() => {
+        setDisplayedText(prev => prev + text[currentIndex]);
+        setCurrentIndex(prev => prev + 1);
+        containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }, 20); // Adjust the speed of typing here
+
+      return () => clearTimeout(timer);
+    }
+  }, [currentIndex, text]);
+
+  return <div ref={containerRef} className="text-sm">{displayedText}</div>;
 }
 
 function SendIcon(props:any) {
@@ -144,7 +193,6 @@ function SendIcon(props:any) {
     </svg>
   )
 }
-
 
 function XIcon(props:any) {
   return (
