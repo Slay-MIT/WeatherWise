@@ -13,7 +13,7 @@ export function Chat_window() {
   const [inputMessage, setInputMessage] = useState('');
   const [currentWeatherData, setCurrentWeatherData] = useState<any>(null);
   const [isTyping, setIsTyping] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchInitialMessage = async () => {
@@ -24,7 +24,10 @@ export function Chat_window() {
   }, []);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (chatContainerRef.current) {
+      const chatContainer = chatContainerRef.current;
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
   }, [messages, isTyping]);
 
   const handleSendMessage = async () => {
@@ -36,9 +39,8 @@ export function Chat_window() {
       type: 'user'
     };
     setMessages(prevMessages => [...prevMessages, userMessage]);
-    setInputMessage(''); // Clear the input message
+    setInputMessage('');
 
-    // Delay showing the typing indicator
     setTimeout(() => setIsTyping(true), 1200);
 
     try {
@@ -60,10 +62,7 @@ export function Chat_window() {
         type: 'bot'
       };
       setMessages(prevMessages => [...prevMessages, botMessage]);
-    } 
-    
-    
-    catch (error) {
+    } catch (error) {
       console.error('Error processing message:', error);
       setIsTyping(false);
       const errorMessage: Message = {
@@ -76,64 +75,55 @@ export function Chat_window() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-background w-full">
-      <header className="flex items-center gap-4 px-4 py-3 border-b bg-background">
-        <Avatar className="w-8 h-8 border">
+    <div className="flex flex-col h-[600px] bg-dark-blue-800 w-full rounded-lg shadow-lg overflow-hidden">
+      <header className="flex items-center gap-4 px-6 py-4 bg-dark-blue-700">
+        <Avatar className="w-10 h-10 border-2 border-primary">
           <AvatarImage src="/placeholder-user.jpg" />
-          <AvatarFallback>CG</AvatarFallback>
+          <AvatarFallback>WW</AvatarFallback>
         </Avatar>
-        <div className="text-sm font-medium">WeatherWise</div>
+        <div className="text-lg font-medium text-foreground">WeatherWise</div>
       </header>
-      <div className="flex-1 overflow-auto p-4">
-        <div className="grid gap-4">
+      <div ref={chatContainerRef} className="flex-1 overflow-auto p-6 bg-dark-blue-800">
+        <div className="grid gap-6">
           {messages.map((message, index) => (
             <div key={index} className={`flex items-start gap-4 ${message.type === 'bot' ? '' : 'flex-row-reverse'}`}>
-              <Avatar className="w-8 h-8 border">
+              <Avatar className="w-8 h-8 border border-primary">
                 {message.type === 'user' ? (
-                  <>
-                    <AvatarFallback>U</AvatarFallback>
-                    <AvatarImage src="/placeholder-user.jpg" />
-                  </>
+                  <AvatarFallback>U</AvatarFallback>
                 ) : (
-                  <>
-                    <AvatarFallback>WW</AvatarFallback>
-                    <AvatarImage src="/placeholder-user.jpg" />
-                  </>
+                  <AvatarFallback>WW</AvatarFallback>
                 )}
               </Avatar>
-              <div className={`grid gap-1 ${message.type === 'bot' ? 'bg-primary text-primary-foreground' : 'bg-muted'} p-3 rounded-lg max-w-[80%]`}>
-                <div className="font-medium">{message.sender}</div>
+              <div className={`grid gap-1 ${message.type === 'bot' ? 'bg-dark-blue-700' : 'bg-primary'} p-4 rounded-lg max-w-[80%]`}>
+                <div className="font-medium text-foreground">{message.sender}</div>
                 {message.type === 'bot' ? (
                   <TypewriterEffect text={message.content} />
                 ) : (
-                  <div className="text-sm">{message.content}</div>
+                  <div className="text-sm text-foreground">{message.content}</div>
                 )}
               </div>
             </div>
           ))}
 
-
           {isTyping && (
             <div className="flex items-start gap-4">
-              <Avatar className="w-8 h-8 border">
+              <Avatar className="w-8 h-8 border border-primary">
                 <AvatarFallback>WW</AvatarFallback>
-                <AvatarImage src="/placeholder-user.jpg" />
               </Avatar>
-              <div className="bg-primary text-primary-foreground p-3 rounded-lg">
-                <div className="font-medium">WeatherWise</div>
-                <div className="text-sm">Typing...</div>
+              <div className="bg-dark-blue-700 p-4 rounded-lg">
+                <div className="font-medium text-foreground">WeatherWise</div>
+                <div className="text-sm text-foreground">Typing...</div>
               </div>
             </div>
           )}
-          <div ref={messagesEndRef} />
         </div>
       </div>
 
-      <div className="sticky bottom-0 w-full bg-background border-t p-2">
+      <div className="sticky bottom-0 w-full bg-dark-blue-700 p-4">
         <div className="relative">
           <Textarea 
             placeholder="Type your message..." 
-            className="w-full rounded-xl pr-16 resize-none" 
+            className="w-full rounded-xl pr-16 resize-none bg-dark-blue-600 text-foreground border-none focus:ring-primary" 
             rows={1}
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
@@ -144,7 +134,7 @@ export function Chat_window() {
               }
             }}
           />
-          <Button type="submit" size="icon" className="absolute top-1/2 -translate-y-1/2 right-2" onClick={handleSendMessage}>
+          <Button type="submit" size="icon" className="absolute top-1/2 -translate-y-1/2 right-2 bg-primary hover:bg-primary-foreground" onClick={handleSendMessage}>
             <SendIcon className="w-5 h-5" />
             <span className="sr-only">Send</span>
           </Button>
@@ -157,21 +147,34 @@ export function Chat_window() {
 function TypewriterEffect({ text }: { text: string }) {
   const [displayedText, setDisplayedText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (currentIndex < text.length) {
-      const timer = setTimeout(() => {
-        setDisplayedText(prev => prev + text[currentIndex]);
-        setCurrentIndex(prev => prev + 1);
-        containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-      }, 20); // Adjust the speed of typing here
+    let animationFrameId: number;
+    const startTime = performance.now();
+    const typingSpeed = 20; // Adjust the speed of typing here (milliseconds per character)
 
-      return () => clearTimeout(timer);
-    }
-  }, [currentIndex, text]);
+    const animate = (currentTime: number) => {
+      const elapsedTime = currentTime - startTime;
+      const newIndex = Math.floor(elapsedTime / typingSpeed);
 
-  return <div ref={containerRef} className="text-sm">{displayedText}</div>;
+      if (newIndex <= text.length) {
+        setDisplayedText(text.slice(0, newIndex));
+        setCurrentIndex(newIndex);
+
+        if (newIndex < text.length) {
+          animationFrameId = requestAnimationFrame(animate);
+        }
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [text]);
+
+  return <div className="text-sm text-foreground">{displayedText}</div>;
 }
 
 function SendIcon(props:any) {
