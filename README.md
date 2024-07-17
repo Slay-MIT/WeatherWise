@@ -20,7 +20,7 @@ WeatherWise is a weather chatbot built with Next.js that leverages the Weather A
 
 ## Demo
 
-![WeatherWise Demo](https://weather-wise-wanderer.vercel.app/) <!-- Replace with your demo GIF URL -->
+- [WeatherWise Demo](https://weather-wise-wanderer.vercel.app/) <!-- Replace with your demo GIF URL -->
 
 ## Installation
 
