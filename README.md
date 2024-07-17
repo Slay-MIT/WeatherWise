@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# WeatherWise
 
-## Getting Started
+WeatherWise is a weather chatbot built with Next.js that leverages the Weather API and Geolocation API to provide weather information for any location. It then uses the Gemini API to offer user-friendly weather insights and advice.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- 🌦️ **Real-time Weather Updates**: Get the latest weather information for any location.
+- 📍 **Geolocation**: Automatically fetch weather data for your current location.
+- 🤖 **Intelligent Advice**: Receive personalized advice based on the weather conditions.
+- 💬 **Interactive Chatbot**: User-friendly chat interface to interact with the bot.
+- 🚀 **Fast and Responsive**: Built with Next.js for optimal performance.
+
+## Screenshots
+
+### HomePage
+![Home Page](]https://github.com/user-attachments/assets/f302d4a4-ae1f-4d64-9388-e82b5e739e5d) <!-- Replace with your screenshot URL -->
+
+### Chat Window
+![Chat Window](https://github.com/user-attachments/assets/dccc3449-636d-495d-b390-aa124b1b0e21)
+
+## Demo
+
+![WeatherWise Demo](https://weather-wise-wanderer.vercel.app/) <!-- Replace with your demo GIF URL -->
+
+## Installation
+
+1. **Clone the repository**
+
+```sh
+git clone https://github.com/Slay-MIT/WeatherWise.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Navigate to the project directory**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```sh
+cd WeatherWise
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+3. **Install dependencies**
 
-## Learn More
+```sh
+npm install next framer-motion @google/generative-ai axios lucide-react
+```
 
-To learn more about Next.js, take a look at the following resources:
+4. **Create a `.env.local` file in the root directory and add your API keys**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```env
+NEXT_PUBLIC_WEATHER_API_KEY=your_weather_api_key
+NEXT_PUBLIC_GEMINI_API_KEY=your_gemini_api_key
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+5. **Run the development server**
 
-## Deploy on Vercel
+```sh
+npm run dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+6. **Open your browser**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```sh
+http://localhost:3000
+```
+
+## Usage
+
+1. **Start a conversation**: Type your message in the input box and press Enter or click the Send button.
+2. **Get weather updates**: Ask for the weather in any location or use the geolocation feature to get weather information for your current location.
+3. **Receive advice**: Get personalized advice based on the current weather conditions.
+
+## Tech Stack
+
+- **Frontend**: Next.js, Tailwind CSS, Framer Motion, 
+- **APIs**: Weather API, Geolocation API, Gemini API
+- **Deployment**: Vercel
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and create a pull request with your changes.
+
+## Acknowledgements
+
+- [Weather API](https://openweathermap.org/api)
+- [Geolocation API](https://openweathermap.org/api)
+- [Gemini API](https://ai.google.dev/)
