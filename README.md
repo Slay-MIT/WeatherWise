@@ -13,7 +13,7 @@ WeatherWise is a weather chatbot built with Next.js that leverages the Weather A
 ## Screenshots
 
 ### HomePage
-![Home Page](]https://github.com/user-attachments/assets/f302d4a4-ae1f-4d64-9388-e82b5e739e5d) <!-- Replace with your screenshot URL -->
+![Home Page](https://github.com/user-attachments/assets/f302d4a4-ae1f-4d64-9388-e82b5e739e5d) <!-- Replace with your screenshot URL -->
 
 ### Chat Window
 ![Chat Window](https://github.com/user-attachments/assets/dccc3449-636d-495d-b390-aa124b1b0e21)
