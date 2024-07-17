@@ -75,7 +75,7 @@ export function Chat_window() {
   };
 
   return (
-    <div className="flex flex-col h-[600px] bg-dark-blue-800 w-full rounded-lg shadow-lg overflow-hidden">
+    <div className="flex flex-col h-[600px] bg-dark-blue-800 w-full rounded-lg shadow-lg overflow-hidden font-lekton">
       <header className="flex items-center gap-4 px-6 py-4 bg-dark-blue-700">
         <Avatar className="w-10 h-10 border-2 border-primary">
           <AvatarImage src="/placeholder-user.jpg" />

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 export default function ClientWeatherHeading() {
     return (
-      <section className="w-full py-16 md:py-24 lg:py-32 bg-gradient-to-b from-dark-blue-800 to-background overflow-hidden">
+      <section className="w-full py-16 md:py-24 lg:py-32 bg-gradient-to-b font-sans from-dark-blue-800 to-background overflow-hidden">
         <div className="px-4 md:px-6 text-center">
           <motion.h1 
             className="text-5xl md:text-6xl lg:text-7xl font-bold text-primary font-['Montserrat', 'sans-serif'] flex items-center justify-center"

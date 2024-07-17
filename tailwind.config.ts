@@ -29,6 +29,10 @@ const config: Config = {
         'muted': '#1e293b', // Slightly lighter than background for contrast
         'accent': '#60a5fa', // Light blue for accents
       },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        lekton:['Lekton', 'monospace'],
+      },
     },
       colors: {
             "border": "hsl(var(--border))",
