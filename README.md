@@ -1,4 +1,4 @@
-# WeatherWise
+# ☁ WeatherWise
 
 WeatherWise is a weather chatbot built with Next.js that leverages the Weather API and Geolocation API to provide weather information for any location. It then uses the Gemini API to offer user-friendly weather insights and advice.
 
