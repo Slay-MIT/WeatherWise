@@ -5,9 +5,26 @@ import { motion } from 'framer-motion';
 export default function ClientWeatherHeading() {
     return (
       <section className="w-full py-16 md:py-24 lg:py-32 bg-gradient-to-b font-sans from-dark-blue-800 to-background overflow-hidden">
-        <div className="px-4 md:px-6 text-center">
+        <div className="absolute flex top-4 right-4 ">
+              <a
+                href="https://github.com/Slay-MIT/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-2"
+              >
+                <img
+                  src="github-mark-white.svg"
+                  alt="GitHub Logo Light"
+                  className="h-5 w-5"
+                />
+                <span className="dark:text-slate-200 text-slate-700 font-lekton">
+                  Slay-MIT
+                </span>
+              </a>
+            </div>
+        <div className="px-4 md:px-6 text-center justify-center items-center">
           <motion.h1 
-            className="text-5xl md:text-6xl lg:text-7xl font-bold text-primary font-['Montserrat', 'sans-serif'] flex items-center justify-center"
+            className="text-5xl md:text-6xl lg:text-7xl font-bold text-primary font-lekton flex items-center justify-center"
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -22,7 +39,7 @@ export default function ClientWeatherHeading() {
             WeatherWise
           </motion.h1>
           <motion.p 
-            className="text-xl md:text-2xl lg:text-3xl text-foreground font-['Lato', 'sans-serif'] mt-4"
+            className="text-xl md:text-2xl lg:text-3xl text-foreground font-lekton mt-4"
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
