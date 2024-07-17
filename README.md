@@ -2,6 +2,25 @@
 
 WeatherWise is a weather chatbot built with Next.js that leverages the Weather API and Geolocation API to provide weather information for any location. It then uses the Gemini API to offer user-friendly weather insights and advice.
 
+
+## Table of Contents
+
+- [Demo](#demo)
+- [Features](#features)
+- [Screenshots](#screenshots)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Technologies Used](#technologies-used)
+- [Contributing](#contributing)
+- [Acknowledgements](#acknowledgements)
+
+
+## Demo
+
+You can view a live demo of the project [here](https://weather-wise-wanderer.vercel.app/).
+![WeatherWise Demo](https://github.com/user-attachments/assets/44b1dd71-1271-472d-ab6e-72c24fc41dc8)
+
+
 ## Features
 
 - 🌦️ **Real-time Weather Updates**: Get the latest weather information for any location.
@@ -10,17 +29,15 @@ WeatherWise is a weather chatbot built with Next.js that leverages the Weather A
 - 💬 **Interactive Chatbot**: User-friendly chat interface to interact with the bot.
 - 🚀 **Fast and Responsive**: Built with Next.js for optimal performance.
 
+
 ## Screenshots
 
-### HomePage
-![Home Page](https://github.com/user-attachments/assets/f302d4a4-ae1f-4d64-9388-e82b5e739e5d) <!-- Replace with your screenshot URL -->
+### Home Page
+![Home Page](https://github.com/user-attachments/assets/f302d4a4-ae1f-4d64-9388-e82b5e739e5d)
 
 ### Chat Window
 ![Chat Window](https://github.com/user-attachments/assets/dccc3449-636d-495d-b390-aa124b1b0e21)
 
-## Demo
-
-- [WeatherWise Demo](https://weather-wise-wanderer.vercel.app/) <!-- Replace with your demo GIF URL -->
 
 ## Installation
 
@@ -61,21 +78,25 @@ npm run dev
 http://localhost:3000
 ```
 
+
 ## Usage
 
 1. **Start a conversation**: Type your message in the input box and press Enter or click the Send button.
 2. **Get weather updates**: Ask for the weather in any location or use the geolocation feature to get weather information for your current location.
 3. **Receive advice**: Get personalized advice based on the current weather conditions.
 
-## Tech Stack
 
-- **Frontend**: Next.js, Tailwind CSS, Framer Motion, 
+## Technologies Used
+
+- **Frontend**: Next.js, Tailwind CSS, Framer Motion
 - **APIs**: Weather API, Geolocation API, Gemini API
 - **Deployment**: Vercel
+
 
 ## Contributing
 
 Contributions are welcome! Please fork the repository and create a pull request with your changes.
+
 
 ## Acknowledgements
 
