@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 export default function ClientWeatherHeading() {
     return (
-      <section className="w-full py-16 md:py-24 lg:py-32 bg-gradient-to-b font-sans from-dark-blue-800 to-background overflow-hidden">
+      <section className="w-full py-16 md:py-24 lg:py-32 bg-gradient-to-b font-sans from-dark-blue-800 to-background overflow-hidden ">
         <div className="absolute flex top-4 right-4 ">
               <a
                 href="https://github.com/Slay-MIT/"
@@ -24,7 +24,7 @@ export default function ClientWeatherHeading() {
             </div>
         <div className="px-4 md:px-6 text-center justify-center items-center">
           <motion.h1 
-            className="text-5xl md:text-6xl lg:text-7xl font-bold text-primary font-lekton flex items-center justify-center"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-primary font-lekton flex items-center justify-center"
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -34,12 +34,12 @@ export default function ClientWeatherHeading() {
               animate={{ y:0 }}
               transition={{ duration: 0.8, ease: "easeIn" }}
             >
-              <CloudIcon className="w-12 h-12 inline-block mr-4 text-primary" />
+              <CloudIcon className="w-8 sm:w-10 md:w-12 h-8 sm:h-10 md:h-12 inline-block mr-4 text-primary" />
             </motion.div>
             WeatherWise
           </motion.h1>
           <motion.p 
-            className="text-xl md:text-2xl lg:text-3xl text-foreground font-lekton mt-4"
+            className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-foreground font-lekton mt-4"
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
