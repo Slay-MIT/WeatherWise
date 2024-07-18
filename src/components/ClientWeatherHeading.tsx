@@ -7,7 +7,7 @@ export default function ClientWeatherHeading() {
       <section className="w-full py-16 md:py-24 lg:py-32 bg-gradient-to-b font-sans from-dark-blue-800 to-background overflow-hidden ">
         <div className="absolute flex top-4 right-4 ">
               <a
-                href="https://github.com/Slay-MIT/"
+                href="https://github.com/Slay-MIT/WeatherWise"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center space-x-2"
