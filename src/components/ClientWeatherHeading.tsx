@@ -6,7 +6,7 @@ export default function ClientWeatherHeading() {
     return (
       <section className="w-full py-16 md:py-24 lg:py-32 bg-gradient-to-b font-sans from-dark-blue-800 to-background overflow-hidden ">
         <div className="absolute flex top-4 right-4 ">
-              <a
+              {/* <a
                 href="https://github.com/Slay-MIT/WeatherWise"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -20,7 +20,7 @@ export default function ClientWeatherHeading() {
                 <span className="dark:text-slate-200 text-slate-700 font-lekton">
                   Slay-MIT
                 </span>
-              </a>
+              </a> */}
             </div>
         <div className="px-4 md:px-6 text-center justify-center items-center">
           <motion.h1 
